@@ -49,9 +49,9 @@ This guide is not intended to teach you Solidity from the ground up, but to help
     + [View or Constant Functions](#view-or-constant-functions)
     + [Pure Functions](#pure-functions)
     + [Payable Functions](#payable-functions)
-    + [Fallback Function](#fallback-function)
+    + [Fallback Functions](#fallback-functions)
   * [Contracts](#contracts)
-    + [Creating contracts using `new`](#creating-contracts-using--new-)
+    + [Creating contracts using `new`](#creating-contracts-using-new)
     + [Contract Inheritance](#contract-inheritance)
       - [Multiple inheritance](#multiple-inheritance)
       - [Constructor of base class](#constructor-of-base-class)
@@ -419,12 +419,22 @@ function f(uint a) pure returns (uint) {
 
 Functions that receive `Ether` are marked as `payable` function.
 
-### Fallback Function
+### Fallback Functions
 
-A contract can have exactly one **unnamed function**. This function cannot have arguments and cannot return anything. It is executed on a call to the contract if none of the other functions match the given function identifier (or if no data was supplied at all).
+`solidity ^0.6`
+
+A contract can have exactly one `receive` function. It executes on calls to the contract with no data (`calldata`), e.g. calls made via `send()` or `transfer()`. The function cannot have arguments, cannot return anything and must have `external` visibility and `payable` state mutability. 
 
 ```solidity
-function() {
+receive() external payable {
+  // React to receiving Ether
+}
+```
+
+A contract can also have exactly one `fallback` function. It executes as a fallback when no other function is matching a call to the contract. This function cannot have arguments, cannot return anything and must have `external` visibility. The function always receives data, but to also receive Ether, it can be marked as `payable`. 
+
+```solidity
+fallback() external {
   // Do something
 }
 ```
